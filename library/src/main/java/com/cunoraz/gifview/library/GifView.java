@@ -44,6 +44,8 @@ public class GifView extends View {
     private volatile boolean mPaused;
     private boolean mVisible = true;
 
+    private int mRepetitionTimes = 1;
+
     public GifView(Context context) {
         this(context, null);
     }
@@ -89,6 +91,9 @@ public class GifView extends View {
         requestLayout();
     }
 
+    public void setRepetitionTimes(int repetitionTimes) {
+        this.mRepetitionTimes = repetitionTimes;
+    }
     public int getGifResource() {
 
         return this.mMovieResourceId;
@@ -236,6 +241,13 @@ public class GifView extends View {
         }
 
         mCurrentAnimationTime = (int) ((now - mMovieStart) % dur);
+
+        if (mRepetitionTimes <= 0) {
+            mRepetitionTimes = 1;
+        }
+        if (now - mMovieStart > dur * mRepetitionTimes) {
+            pause();
+        }
     }
 
     /**
